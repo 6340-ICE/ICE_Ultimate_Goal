@@ -14,35 +14,60 @@ public class RedC extends LinearOpMode {
     public void runOpMode() {
            MecanumDrive6340 drive = new MecanumDrive6340(hardwareMap);
 
-           Pose2d startPose = new Pose2d(-62,-50, Math.toRadians(0));
+           Pose2d startPose = new Pose2d(-62,-55, Math.toRadians(0));
 
            drive.setPoseEstimate(startPose);
 
            Trajectory targetZoneC = drive.trajectoryBuilder(startPose)
-               .splineTo(new Vector2d( 55,-55), Math.toRadians(0))
+               .splineTo(new Vector2d(60, -51), Math.toRadians(0))
                .build();
 
-           Trajectory cToGoal = drive.trajectoryBuilder(targetZoneC.end(),true)
-                   .splineTo(new Vector2d(-35,-22), Math.toRadians(0))
-                   .build();
 
-           Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())
-                   .splineTo(new Vector2d(60,-55), Math.toRadians(0))
-                   .build();
-           Trajectory cToLine = drive.trajectoryBuilder(goalToC.end())
-                   .splineTo(new Vector2d(5.00 -55.00), Math.toRadians(0))
-                   .build();
+              Trajectory cToGoal = drive.trajectoryBuilder(targetZoneC.end(),true)
+                      .splineTo(new Vector2d(-30,-22), Math.toRadians(180))
+                      .build();
 
+              Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())
+                      .splineTo(new Vector2d(60,-51), Math.toRadians(90))
+                      .build();
+              Trajectory cToLine = drive.trajectoryBuilder(goalToC.end())
+                      .splineTo(new Vector2d(12,12), Math.toRadians(180))
+                      .addTemporalMarker(2,()-> {
+                          drive.retractArm();
+                          sleep(1000);
+                          drive.arm.setPower(0);
+                      })
+                      .build();
+
+
+
+             /* Trajectory cToLine = drive.trajectoryBuilder(dropOffGoal.end(),true)
+                      .splineTo(new Vector2d(5,50), Math.toRadians(-180))
+                      .build();
+            */
 
 
            waitForStart();
 
            if(isStopRequested()) return;
 
-           drive.followTrajectory(targetZoneC);
-           drive.followTrajectory(cToGoal);
-           drive.followTrajectory(goalToC);
-           drive.followTrajectory(cToLine);
+           drive.grabGoal();//grab goal,
+
+
+           drive.followTrajectory(targetZoneC); //Drive to target zone C
+           drive.releaseGoal();// release goal,
+           sleep(1000);// wait 1 sec,
+           drive.deployArm();// deploy arm,
+           drive.followTrajectory(cToGoal);// drive to second goal,
+           drive.grabGoal();// grab goal,
+           sleep(1000);
+           drive.followTrajectory(goalToC);// Drive back to C
+           drive.releaseGoal();// release goal
+           sleep(1000);
+
+           drive.followTrajectory(cToLine);// drive to line + pick up arm
+
+          //
 
        }
 }

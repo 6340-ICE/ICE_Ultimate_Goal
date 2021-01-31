@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
 
@@ -20,6 +21,7 @@ public class TeleOp extends LinearOpMode {
         MecanumDrive6340 drive = new MecanumDrive6340(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
 
@@ -44,9 +46,11 @@ public class TeleOp extends LinearOpMode {
             else if (gamepad2.right_trigger<0.5)
             drive.shooter.setVelocity (0);
 
+            drive.Arm(gamepad2.right_stick_y/2);
 
+            telemetry.addData("targetVelocity",drive.shooter.getVelocity());
 
-        drive.Arm(gamepad2.right_stick_y/2);
+            telemetry.update();
         }
     }
 }
