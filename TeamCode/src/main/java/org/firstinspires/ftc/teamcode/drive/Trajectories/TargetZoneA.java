@@ -6,15 +6,13 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-
-import static java.lang.Math.*;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
 
 @Autonomous
 public class TargetZoneA extends LinearOpMode {
        @Override
     public void runOpMode() {
-           SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+           MecanumDrive6340 drive = new MecanumDrive6340(hardwareMap);
 
            Pose2d startPose = new Pose2d(-62,55, Math.toRadians(0));
 

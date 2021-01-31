@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
@@ -14,8 +13,8 @@ import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
  * exercise is to ascertain whether the localizer has been configured properly (note: the pure
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
-@TeleOp(group = "drive")
-public class LocalizationTest extends LinearOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "drive")
+public class TeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumDrive6340 drive = new MecanumDrive6340(hardwareMap);
@@ -32,14 +31,22 @@ public class LocalizationTest extends LinearOpMode {
                             -gamepad1.right_stick_x
                     )
             );
+                                    //TODO create button map
 
-            drive.update();
+                                            drive.update();
+            if (gamepad2.x)
+                drive.intakeRings();
+            if (gamepad2.b)
+                drive.intake.setPower(0);
 
-            Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
-            telemetry.update();
+            if (gamepad2.right_trigger>0.5)
+            drive.shootRings();
+            else if (gamepad2.right_trigger<0.5)
+            drive.shooter.setVelocity (0);
+
+
+
+        drive.Arm(gamepad2.right_stick_y/2);
         }
     }
 }

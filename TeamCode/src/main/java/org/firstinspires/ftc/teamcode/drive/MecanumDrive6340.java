@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -60,7 +61,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * Simple mecanum drive hardware implementation for REV hardware.
  */
 @Config
-public class SampleMecanumDrive extends MecanumDrive {
+public class MecanumDrive6340 extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
 
@@ -95,19 +96,24 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     protected DcMotorEx leftFront, leftRear, rightRear, rightFront;
     protected List<DcMotorEx> motors;
+    public DcMotorEx intake;
+    public DcMotorEx shooter;
+    public DcMotorEx arm;
+
+
     protected BNO055IMU imu;
 
     /*
     Instantiate servos
      */
-    protected Servo leftServo, rightServo;
+    protected Servo leftServo, rightServo, armServo;
 
 
     protected VoltageSensor batteryVoltageSensor;
 
     private Pose2d lastPoseOnTurn;
 
-    public SampleMecanumDrive(HardwareMap hardwareMap) {        super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+    public MecanumDrive6340(HardwareMap hardwareMap) {        super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
 
         dashboard = FtcDashboard.getInstance();
@@ -152,6 +158,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        arm = hardwareMap.get(DcMotorEx.class, "frontEncoder");
+        shooter = hardwareMap.get(DcMotorEx.class, "shooter");
+        intake = hardwareMap.get(DcMotorEx.class, "rightEncoder");
+
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -174,6 +184,8 @@ public class SampleMecanumDrive extends MecanumDrive {
         // reverse any motors using DcMotor.setDirection()
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
+        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         // if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
@@ -405,4 +417,39 @@ public class SampleMecanumDrive extends MecanumDrive {
     public double getRawExternalHeading() {
         return imu.getAngularOrientation().firstAngle;
     }
+
+
+    /*
+    Ice commands
+         */
+
+    public void intakeRings (){
+        intake.setPower (0.5);
+
+    }
+
+    //Shooter
+    public void shootRings (){
+        shooter.setVelocity(2000);
+    }
+    //Arm
+    public void Arm (double power){
+        arm.setPower(power);
+    }
+    //Grab goal
+    public void grabGoal (){
+        leftServo.setPosition(0.9);
+        rightServo.setPosition(0);
+        armServo.setPosition(0);
+
+    }
+    //Release goal
+    public void releaseGoal () {
+        leftServo.setPosition(0);
+        rightServo.setPosition(1);
+        armServo.setPosition(1);
+    }
+
+
+
 }
