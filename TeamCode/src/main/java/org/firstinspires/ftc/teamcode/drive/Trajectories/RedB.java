@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
 
 @Autonomous
-public class RedA extends LinearOpMode {
+public class RedB extends LinearOpMode {
        @Override
     public void runOpMode() {
            MecanumDrive6340 drive = new MecanumDrive6340(hardwareMap);

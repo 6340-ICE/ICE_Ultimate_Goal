@@ -24,7 +24,7 @@ public class RedC extends LinearOpMode {
 
 
               Trajectory cToGoal = drive.trajectoryBuilder(targetZoneC.end(),true)
-                      .splineTo(new Vector2d(-30,-22), Math.toRadians(180))
+                      .splineTo(new Vector2d(-33,-22), Math.toRadians(180))
                       .build();
 
               Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())
