@@ -37,12 +37,14 @@ public class TargetZoneA extends LinearOpMode {
            if(isStopRequested()) return;
 
            drive.followTrajectory(targetZoneA);
-           //Deploy Wobble Goal by setting servo to open
-           //Deploy Arm
+           drive.releaseGoal();//Deploy Wobble Goal by setting servo to open
+          drive.deployArm();
+          sleep(1000);//Deploy Arm
+              drive.arm.setPower(0);
            drive.followTrajectory(aToGoal);
-           //Grab Goal by setting servo to close
-           //drive.followTrajectory(goalToA);
-           //Release Goal by setting servo to open
+           drive.grabGoal();//Grab Goal by setting servo to close
+           drive.followTrajectory(goalToA);
+           drive.releaseGoal();//Release Goal by setting servo to open
 
        }
 }
