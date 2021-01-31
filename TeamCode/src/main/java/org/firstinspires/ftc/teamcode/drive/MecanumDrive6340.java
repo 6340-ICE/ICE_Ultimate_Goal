@@ -424,20 +424,23 @@ public class MecanumDrive6340 extends MecanumDrive {
          */
 
     public void intakeRings (){
-        intake.setPower (0.5);
+        intake.setPower (-1);
 
     }
 
     //Shooter
     public void shootRings (){
-        shooter.setVelocity(2000);
+        shooter.setVelocity(1700);
     }
 
     //Arm
     public void deployArm(){arm.setPower(.5);
+        }
 
+    public void retractArm() {
+        arm.setPower(-0.5);
     }
-    public void Arm (double power){
+        public void Arm (double power){
         arm.setPower(power);
     }
     //Grab goal
