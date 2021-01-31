@@ -187,9 +187,9 @@ public class MecanumDrive6340 extends MecanumDrive {
         shooter.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //define and initialize all installed servos
-        leftServo = hardwareMap.get(Servo.class, "leftservo");
-        rightServo = hardwareMap.get(Servo.class, "rightservo");
-        armServo = hardwareMap.get(Servo.class, "armservo");
+        leftServo = hardwareMap.get(Servo.class, "leftServo");
+        rightServo = hardwareMap.get(Servo.class, "rightServo");
+        armServo = hardwareMap.get(Servo.class, "armServo");
 
 
         // if desired, use setLocalizer() to change the localization method

@@ -19,7 +19,7 @@ public class RedC extends LinearOpMode {
            drive.setPoseEstimate(startPose);
 
            Trajectory targetZoneC = drive.trajectoryBuilder(startPose)
-               .splineTo(new Vector2d(60, -51), Math.toRadians(0))
+               .splineTo(new Vector2d(55, -51), Math.toRadians(0))
                .build();
 
 
@@ -28,11 +28,12 @@ public class RedC extends LinearOpMode {
                       .build();
 
               Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())
-                      .splineTo(new Vector2d(60,-51), Math.toRadians(90))
+                      .splineTo(new Vector2d(48
+                              ,-36), Math.toRadians(90))
                       .build();
               Trajectory cToLine = drive.trajectoryBuilder(goalToC.end())
                       .splineTo(new Vector2d(12,12), Math.toRadians(180))
-                      .addTemporalMarker(2,()-> {
+                      .addTemporalMarker(0.5,()-> {
                           drive.retractArm();
                           sleep(1000);
                           drive.arm.setPower(0);
@@ -60,7 +61,7 @@ public class RedC extends LinearOpMode {
            drive.deployArm();// deploy arm,
            drive.followTrajectory(cToGoal);// drive to second goal,
            drive.grabGoal();// grab goal,
-           sleep(1000);
+           sleep(1500);
            drive.followTrajectory(goalToC);// Drive back to C
            drive.releaseGoal();// release goal
            sleep(1000);
