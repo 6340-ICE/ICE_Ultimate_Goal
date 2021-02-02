@@ -18,19 +18,19 @@ public class RedB extends LinearOpMode {
 
            drive.setPoseEstimate(startPose);
 
-           Trajectory targetZoneA = drive.trajectoryBuilder(startPose)
-               .splineTo(new Vector2d( 8,-55), Math.toRadians(0))
+           Trajectory startToB = drive.trajectoryBuilder(startPose)
+               .splineTo(new Vector2d( 35,-52), Math.toRadians(0))
                .build();
-           Trajectory aToGoal = drive.trajectoryBuilder(targetZoneA.end(), true )
-                   .splineTo(new Vector2d(-33, -22), Math.toRadians(180))
+           Trajectory shiftLeft = drive.trajectoryBuilder(startToB.end())
+                   .strafeLeft(new Vector2d(35, -30), Math.toRadians(0))
                    .build();
-           Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
-                   .splineTo(new Vector2d(8, -35), Math.toRadians(90))
+           Trajectory bToGoal = drive.trajectoryBuilder(shiftLeft.end(),  true)
+                   .splineTo(new Vector2d(-33 -22), Math.toRadians(180))
                    .build();
-           Trajectory aLine = drive.trajectoryBuilder(goalToA.end())
-                   .splineTo(new Vector2d(8, -6), Math.toRadians(90))
+           Trajectory goalToB = drive.trajectoryBuilder(bToGoal.end())
+                   .splineTo(new Vector2d(30, -22), Math.toRadians(90))
                    .build();
-           Trajectory aLine2 = drive.trajectoryBuilder(aLine.end())
+           Trajectory bLine = drive.trajectoryBuilder(goalToB.end())
                    .splineTo(new Vector2d( 8, -6 ), Math.toRadians(0))
                    .build();
 
@@ -45,17 +45,17 @@ public class RedB extends LinearOpMode {
 
            if(isStopRequested()) return;
 
-           drive.followTrajectory(targetZoneA);
+           drive.followTrajectory(startToB);
            drive.releaseGoal();
            sleep(1000);
            drive.deployArm();
-           drive.followTrajectory(aToGoal);           //Go back for second wobble goal
+           drive.followTrajectory(shiftLeft);
+           drive.followTrajectory(bToGoal);//Go back for second wobble goal
            drive.grabGoal(); //grab wobble goal
-           drive.followTrajectory(goalToA);
+           drive.followTrajectory(goalToB);
            drive.releaseGoal();
            sleep(1000);
-           drive.followTrajectory(aLine);
-           drive.followTrajectory(aLine2);
+           drive.followTrajectory(bLine);
 
 
            //Shoot preloaded rings
