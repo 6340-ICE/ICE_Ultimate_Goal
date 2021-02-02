@@ -64,6 +64,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 public class MecanumDrive6340 extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
+   public static PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(30, 0, 2, 15);
 
     public static double LATERAL_MULTIPLIER = 1;
 
@@ -174,6 +175,16 @@ public class MecanumDrive6340 extends MecanumDrive {
         if (RUN_USING_ENCODER) {
             setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+
+        //Turn on RUN_USING_ENCODER
+        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Set PIDF Coefficients with voltage compensated feedforward value
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(
+                SHOOTER_PID.p, SHOOTER_PID.i, SHOOTER_PID.d,
+                SHOOTER_PID.f * 12 / hardwareMap.voltageSensor.iterator().next().getVoltage()
+        ));
+
 
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -435,7 +446,7 @@ public class MecanumDrive6340 extends MecanumDrive {
 
     //Shooter
     public void shootRings (){
-        shooter.setVelocity(1800);
+        shooter.setVelocity(1400);
     }
 
     //Arm
