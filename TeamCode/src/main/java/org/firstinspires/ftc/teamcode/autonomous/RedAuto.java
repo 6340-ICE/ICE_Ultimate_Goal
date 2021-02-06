@@ -140,6 +140,31 @@ TRAJECTORIES
         Trajectory aLine2 = drive.trajectoryBuilder(aLine.end())
                 .splineTo(new Vector2d( 8, -6 ), Math.toRadians(0))
                 .build();
+        Trajectory startToB = drive.trajectoryBuilder(new Pose2d(-62, -55))
+                .forward(90)
+                .build();
+        Trajectory left = drive.trajectoryBuilder(startToB.end())
+                .strafeLeft(35)
+                .build();
+        Trajectory bToGoal = drive.trajectoryBuilder(left.end(), true)
+                .splineTo(new Vector2d(-36, -24),Math.toRadians(180))
+                .build();
+
+
+        Trajectory goalToB = drive.trajectoryBuilder(bToGoal.end())
+                .splineTo(new Vector2d(24, -25), Math.toRadians(90))
+                .build();
+
+        Trajectory bLine2 = drive.trajectoryBuilder(goalToB.end())
+                .splineTo(new Vector2d( 0, 0 ), Math.toRadians(180))
+                .build();
+
+
+
+
+
+
+
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -225,7 +250,22 @@ TRAJECTORIES
             drive.followTrajectory(cToLine);// drive to line + pick up arm
 
              } else if (targetZone.equals("B")) {
-            // REDB STUFF
+            if(isStopRequested()) return;
+            drive.grabGoal();
+            sleep(500);
+            drive.followTrajectory(startToB);
+            drive.followTrajectory(left);
+            drive.releaseGoal();
+            sleep(1000);
+            drive.deployArm();
+            drive.followTrajectory(bToGoal);//Go back for second wobble goal
+            drive.grabGoal(); //grab wobble goal
+            drive.followTrajectory(goalToB);
+            drive.releaseGoal();
+            sleep(1000);
+            drive.followTrajectory(bLine2);
+            drive.retractArm();
+            sleep(1000);
         }else if (targetZone.equals("A")) {
             drive.followTrajectory(lineToA);
             drive.releaseGoal();

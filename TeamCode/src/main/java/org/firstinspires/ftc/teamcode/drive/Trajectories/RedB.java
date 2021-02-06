@@ -21,16 +21,16 @@ public class RedB extends LinearOpMode {
 
 
            Trajectory startToB = drive.trajectoryBuilder(new Pose2d(-62, -55))
-                   .forward(96)
+                   .forward(90)
                    .build();
-           Trajectory left = drive.trajectoryBuilder(startToB.end())
-                   .strafeLeft(24)
+              Trajectory left = drive.trajectoryBuilder(startToB.end())
+                      .strafeLeft(35)
+                      .build();
+           Trajectory bToGoal = drive.trajectoryBuilder(left.end(), true)
+                   .splineTo(new Vector2d(-36, -24),Math.toRadians(180))
                    .build();
 
 
-              Trajectory bToGoal = drive.trajectoryBuilder(left.end(),  true)
-                   .splineTo(new Vector2d(-33,-22), Math.toRadians(180))
-                   .build();
               Trajectory goalToB = drive.trajectoryBuilder(bToGoal.end())
                    .splineTo(new Vector2d(24, -25), Math.toRadians(90))
                    .build();
@@ -50,7 +50,7 @@ public class RedB extends LinearOpMode {
 
            if(isStopRequested()) return;
            drive.grabGoal();
-           sleep(100);
+           sleep(500);
            drive.followTrajectory(startToB);
            drive.followTrajectory(left);
            drive.releaseGoal();
