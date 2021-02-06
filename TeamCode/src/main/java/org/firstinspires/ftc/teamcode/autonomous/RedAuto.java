@@ -29,6 +29,9 @@
 
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -39,6 +42,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
 
 import java.util.List;
 
@@ -60,7 +64,6 @@ public class RedAuto extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
-
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -90,6 +93,54 @@ public class RedAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+/*
+TRAJECTORIES
+ */
+        MecanumDrive6340 drive = new MecanumDrive6340(hardwareMap);
+
+        Pose2d startPose = new Pose2d(-62,-55, Math.toRadians(0));
+
+        drive.setPoseEstimate(startPose);
+
+        Trajectory targetZoneC = drive.trajectoryBuilder(startPose)
+                .splineTo(new Vector2d(55, -51), Math.toRadians(0))
+                .build();
+
+
+        Trajectory cToGoal = drive.trajectoryBuilder(targetZoneC.end(),true)
+                .splineTo(new Vector2d(-33,-22), Math.toRadians(180))
+                .build();
+
+        Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())
+                .splineTo(new Vector2d(48,-36), Math.toRadians(90))
+                .build();
+        Trajectory cToLine = drive.trajectoryBuilder(goalToC.end())
+                .splineTo(new Vector2d(12,12), Math.toRadians(180))
+                .addTemporalMarker(0.5,()-> {
+                    drive.retractArm();
+                    sleep(1000);
+                    drive.arm.setPower(0);
+                })
+                .build();
+
+
+        Trajectory lineToA = drive.trajectoryBuilder(startPose)
+                .splineTo(new Vector2d( 8,-55), Math.toRadians(0))
+                .build();
+        Trajectory aToGoal = drive.trajectoryBuilder(lineToA.end(), true )
+                .splineTo(new Vector2d(-33, -22), Math.toRadians(180))
+                .build();
+        Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
+                .splineTo(new Vector2d(8, -35), Math.toRadians(90))
+                .build();
+        Trajectory aLine = drive.trajectoryBuilder(goalToA.end())
+                .splineTo(new Vector2d(8, -6), Math.toRadians(90))
+                .build();
+        Trajectory aLine2 = drive.trajectoryBuilder(aLine.end())
+                .splineTo(new Vector2d( 8, -6 ), Math.toRadians(0))
+                .build();
+
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -160,11 +211,33 @@ public class RedAuto extends LinearOpMode {
         //AUTONOMOUS STUFF RIGHT HERE
 
         if (targetZone.equals("C")) {
-            // REDC STUFF
-        } else if (targetZone.equals("B")) {
+            drive.grabGoal();//grab goal,
+            drive.followTrajectory(targetZoneC); //Drive to target zone C
+            drive.releaseGoal();// release goal,
+            sleep(1000);// wait 1 sec,
+            drive.deployArm();// deploy arm,
+            drive.followTrajectory(cToGoal);// drive to second goal,
+            drive.grabGoal();// grab goal,
+            sleep(1500);
+            drive.followTrajectory(goalToC);// Drive back to C
+            drive.releaseGoal();// release goal
+            sleep(1000);
+            drive.followTrajectory(cToLine);// drive to line + pick up arm
+
+             } else if (targetZone.equals("B")) {
             // REDB STUFF
         }else if (targetZone.equals("A")) {
-            // REDA STUFF
+            drive.followTrajectory(lineToA);
+            drive.releaseGoal();
+            sleep(1000);
+            drive.deployArm();
+            drive.followTrajectory(aToGoal);           //Go back for second wobble goal
+            drive.grabGoal(); //grab wobble goal
+            drive.followTrajectory(goalToA);
+            drive.releaseGoal();
+            sleep(1000);
+            drive.followTrajectory(aLine);
+            drive.followTrajectory(aLine2);
 
             }
         }
