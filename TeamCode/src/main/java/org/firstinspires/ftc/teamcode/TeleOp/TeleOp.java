@@ -36,18 +36,23 @@ public class TeleOp extends LinearOpMode {
                                     //TODO create button map
 
                                             drive.update();
-            if (gamepad2.x)
+            if (gamepad2.x) // X is intake system
                 drive.intakeRings();
-            if (gamepad2.b)
+
+            if (gamepad2.b) // B is stopping intake
                 drive.intake.setPower(0);
 
-            if (gamepad2.right_trigger>0.5)
+            if (gamepad2.right_trigger>0.5) // Right trigger starts shooter, releasing trigger stops it
             drive.shootRings();
             else if (gamepad2.right_trigger<0.5)
             drive.shooter.setVelocity (0);
 
-            drive.Arm(gamepad2.right_stick_y/2);
+            drive.Arm(gamepad2.right_stick_y/2); // Right stick down pulls arm up, and vice versa
 
+            if (gamepad2.right_bumper) //Right bumper grabs with arm servo
+                drive.grabGoal();
+            if (gamepad2.left_bumper) // Left bumper releases arm servo
+                drive.releaseGoal();
             telemetry.addData("targetVelocity",drive.shooter.getVelocity());
 
             telemetry.update();
