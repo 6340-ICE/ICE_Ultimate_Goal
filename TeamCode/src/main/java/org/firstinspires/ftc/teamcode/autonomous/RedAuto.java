@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -59,11 +60,12 @@ import java.util.List;
 @Autonomous(name = "Concept: Red Auto", group = "Autonomous")
 //@Disabled
 public class RedAuto extends LinearOpMode {
-    private String targetZone = "A";
 
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
+    private String targetZone = "A";
+
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -113,10 +115,10 @@ TRAJECTORIES
                 .build();
 
         Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())
-                .splineTo(new Vector2d(48,-36), Math.toRadians(90))
+                .splineTo(new Vector2d(48,-40), Math.toRadians(90))
                 .build();
         Trajectory cToLine = drive.trajectoryBuilder(goalToC.end())
-                .splineTo(new Vector2d(12,12), Math.toRadians(180))
+                .splineTo(new Vector2d(0,12), Math.toRadians(180))
                 .addTemporalMarker(0.5,()-> {
                     drive.retractArm();
                     sleep(1000);
@@ -137,9 +139,10 @@ TRAJECTORIES
         Trajectory aLine = drive.trajectoryBuilder(goalToA.end())
                 .splineTo(new Vector2d(8, -6), Math.toRadians(90))
                 .build();
-        Trajectory aLine2 = drive.trajectoryBuilder(aLine.end())
-                .splineTo(new Vector2d( 8, -6 ), Math.toRadians(0))
-                .build();
+
+
+
+        //B STUFFF
         Trajectory startToB = drive.trajectoryBuilder(new Pose2d(-62, -55))
                 .forward(90)
                 .build();
@@ -152,11 +155,11 @@ TRAJECTORIES
 
 
         Trajectory goalToB = drive.trajectoryBuilder(bToGoal.end())
-                .splineTo(new Vector2d(24, -25), Math.toRadians(90))
+                .splineTo(new Vector2d(24, -23), Math.toRadians(90))
                 .build();
 
         Trajectory bLine2 = drive.trajectoryBuilder(goalToB.end())
-                .splineTo(new Vector2d( 0, 0 ), Math.toRadians(180))
+                .splineTo(new Vector2d( 0, 5 ), Math.toRadians(180))
                 .build();
 
 
@@ -193,7 +196,8 @@ TRAJECTORIES
         waitForStart();
 
         if (opModeIsActive()) {
-            while (opModeIsActive()) {
+            ElapsedTime timeout = new ElapsedTime();
+            while (timeout.time()<3.0) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
@@ -210,6 +214,7 @@ TRAJECTORIES
                                 recognition.getLeft(), recognition.getTop());
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
+
                         // check label to see which target zone to go after
                         if (recognition.getLabel().equals("Single")) {
                             telemetry.addData("Target Zone", "B");
@@ -217,15 +222,14 @@ TRAJECTORIES
                         } else if (recognition.getLabel().equals ("Quad")) {
                             telemetry.addData("Target Zone", "C");
                             targetZone = "C";
-                        } else {
-                            targetZone = "A";
                         }
 
 
                       }
-                      telemetry.update();
                     }
                 }
+                telemetry.update();
+
             }
         }
 
@@ -250,7 +254,7 @@ TRAJECTORIES
             drive.followTrajectory(cToLine);// drive to line + pick up arm
 
              } else if (targetZone.equals("B")) {
-            if(isStopRequested()) return;
+
             drive.grabGoal();
             sleep(500);
             drive.followTrajectory(startToB);
@@ -266,8 +270,12 @@ TRAJECTORIES
             drive.followTrajectory(bLine2);
             drive.retractArm();
             sleep(1000);
+
         }else if (targetZone.equals("A")) {
+            drive.grabGoal();
+
             drive.followTrajectory(lineToA);
+
             drive.releaseGoal();
             sleep(1000);
             drive.deployArm();
@@ -277,7 +285,6 @@ TRAJECTORIES
             drive.releaseGoal();
             sleep(1000);
             drive.followTrajectory(aLine);
-            drive.followTrajectory(aLine2);
 
             }
         }
