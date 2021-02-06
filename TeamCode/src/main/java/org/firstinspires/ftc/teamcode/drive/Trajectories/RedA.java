@@ -12,16 +12,17 @@ import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
 public class RedA extends LinearOpMode {
        @Override
     public void runOpMode() {
+
            MecanumDrive6340 drive = new MecanumDrive6340(hardwareMap);
 
            Pose2d startPose = new Pose2d(-62,-55, Math.toRadians(0));
 
            drive.setPoseEstimate(startPose);
 
-           Trajectory targetZoneA = drive.trajectoryBuilder(startPose)
+           Trajectory lineToA = drive.trajectoryBuilder(startPose)
                .splineTo(new Vector2d( 8,-55), Math.toRadians(0))
                .build();
-           Trajectory aToGoal = drive.trajectoryBuilder(targetZoneA.end(), true )
+           Trajectory aToGoal = drive.trajectoryBuilder(lineToA.end(), true )
                    .splineTo(new Vector2d(-33, -22), Math.toRadians(180))
                    .build();
            Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
@@ -45,7 +46,7 @@ public class RedA extends LinearOpMode {
 
            if(isStopRequested()) return;
 
-           drive.followTrajectory(targetZoneA);
+           drive.followTrajectory(lineToA);
            drive.releaseGoal();
            sleep(1000);
            drive.deployArm();
