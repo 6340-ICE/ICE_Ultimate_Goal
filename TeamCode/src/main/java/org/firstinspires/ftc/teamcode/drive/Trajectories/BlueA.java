@@ -19,24 +19,22 @@ public class BlueA extends LinearOpMode {
            drive.setPoseEstimate(startPose);
 
            Trajectory startToA = drive.trajectoryBuilder(startPose)
-               .splineTo(new Vector2d(10, 55), Math.toRadians(0))
+               .splineTo(new Vector2d(8, 55), Math.toRadians(0))
                .build();
 
 
               Trajectory aToGoal = drive.trajectoryBuilder(startToA.end(),true)
-                      .splineTo(new Vector2d(-29,26), Math.toRadians(-180))
+                      .splineTo(new Vector2d(-33,22), Math.toRadians(-180))
                       .build();
 
               Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
-                      .splineTo(new Vector2d(10,45), Math.toRadians(-90))
+                      .splineTo(new Vector2d(8,35), Math.toRadians(-90))
                       .build();
               Trajectory aToLine1 = drive.trajectoryBuilder(goalToA.end())
-                      .splineTo(new Vector2d(10,30), Math.toRadians(-90))
+                      .splineTo(new Vector2d(8,30), Math.toRadians(0))
                       .build();
 
-              Trajectory aToLine2 = drive.trajectoryBuilder(aToLine1.end())
-                      .splineTo(new Vector2d(10,20), Math.toRadians(0))
-                      .build();
+
 
 
 
@@ -50,7 +48,7 @@ public class BlueA extends LinearOpMode {
            drive.followTrajectory(aToGoal);
            drive.followTrajectory(goalToA);
            drive.followTrajectory(aToLine1);
-           drive.followTrajectory(aToLine2);
+
 
            //Grab Goal by setting servo to close
            //drive.followTrajectory(goalToA);
