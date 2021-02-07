@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.Trajectories;
+  package org.firstinspires.ftc.teamcode.drive.Trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -30,9 +30,13 @@ public class BlueA extends LinearOpMode {
               Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
                       .splineTo(new Vector2d(8,35), Math.toRadians(-90))
                       .build();
-              Trajectory aToLine1 = drive.trajectoryBuilder(goalToA.end())
+           Trajectory aToLine1 = drive.trajectoryBuilder(aToGoal.end())
+                   .forward(20)
+                   .build();
+              Trajectory aToLine2 = drive.trajectoryBuilder(aToLine1.end())
                       .splineTo(new Vector2d(8,30), Math.toRadians(0))
                       .build();
+
 
 
 
@@ -41,13 +45,21 @@ public class BlueA extends LinearOpMode {
            waitForStart();
 
            if(isStopRequested()) return;
-
+           drive.grabGoal();
+           sleep(500);
            drive.followTrajectory(startToA);
-           //Deploy Wobble Goal by setting servo to open
-           //Deploy Arm
+           drive.releaseGoal();
+           sleep(1000);
+           drive.deployArm();
            drive.followTrajectory(aToGoal);
+           drive.grabGoal();
            drive.followTrajectory(goalToA);
+           drive.releaseGoal();
            drive.followTrajectory(aToLine1);
+           sleep(100);
+           drive.retractArm();
+           drive.followTrajectory(aToLine2);
+
 
 
            //Grab Goal by setting servo to close

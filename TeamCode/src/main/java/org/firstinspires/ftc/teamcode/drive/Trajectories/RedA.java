@@ -45,7 +45,8 @@ public class RedA extends LinearOpMode {
            waitForStart();
 
            if(isStopRequested()) return;
-
+           drive.grabGoal();
+           sleep(500);
            drive.followTrajectory(lineToA);
            drive.releaseGoal();
            sleep(1000);
