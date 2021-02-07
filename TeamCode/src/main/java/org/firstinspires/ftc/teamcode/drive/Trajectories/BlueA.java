@@ -18,26 +18,24 @@ public class BlueA extends LinearOpMode {
 
            drive.setPoseEstimate(startPose);
 
-           Trajectory targetZoneC = drive.trajectoryBuilder(startPose)
-               .splineTo(new Vector2d(60, 50), Math.toRadians(0))
+           Trajectory startToA = drive.trajectoryBuilder(startPose)
+               .splineTo(new Vector2d(10, 55), Math.toRadians(0))
                .build();
 
 
-              Trajectory cToGoal = drive.trajectoryBuilder(targetZoneC.end(),true)
+              Trajectory aToGoal = drive.trajectoryBuilder(startToA.end(),true)
                       .splineTo(new Vector2d(-29,26), Math.toRadians(-180))
                       .build();
 
-              Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())
-                      .splineTo(new Vector2d(60,50), Math.toRadians(0))
+              Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
+                      .splineTo(new Vector2d(10,45), Math.toRadians(-90))
                       .build();
-              Trajectory dropOffGoal = drive.trajectoryBuilder(goalToC.end())
-                      .splineTo(new Vector2d(60,50), Math.toRadians(-180))
+              Trajectory aToLine1 = drive.trajectoryBuilder(goalToA.end())
+                      .splineTo(new Vector2d(10,30), Math.toRadians(-90))
                       .build();
 
-
-
-              Trajectory cToLine = drive.trajectoryBuilder(dropOffGoal.end(),true)
-                      .splineTo(new Vector2d(5,50), Math.toRadians(-180))
+              Trajectory aToLine2 = drive.trajectoryBuilder(aToLine1.end())
+                      .splineTo(new Vector2d(10,20), Math.toRadians(0))
                       .build();
 
 
@@ -46,12 +44,13 @@ public class BlueA extends LinearOpMode {
 
            if(isStopRequested()) return;
 
-           drive.followTrajectory(targetZoneC);
+           drive.followTrajectory(startToA);
            //Deploy Wobble Goal by setting servo to open
            //Deploy Arm
-           drive.followTrajectory(cToGoal);
-           drive.followTrajectory(goalToC);
-           drive.followTrajectory(dropOffGoal);
+           drive.followTrajectory(aToGoal);
+           drive.followTrajectory(goalToA);
+           drive.followTrajectory(aToLine1);
+           drive.followTrajectory(aToLine2);
 
            //Grab Goal by setting servo to close
            //drive.followTrajectory(goalToA);
