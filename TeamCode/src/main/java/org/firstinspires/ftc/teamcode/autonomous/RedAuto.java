@@ -139,7 +139,9 @@ TRAJECTORIES
         Trajectory aLine = drive.trajectoryBuilder(goalToA.end())
                 .splineTo(new Vector2d(8, -6), Math.toRadians(90))
                 .build();
-
+        Trajectory aLine2 = drive.trajectoryBuilder(aLine.end())
+                .splineTo(new Vector2d( 8, -6 ), Math.toRadians(0))
+                .build();
 
 
         //B STUFFF
@@ -273,9 +275,8 @@ TRAJECTORIES
 
         }else if (targetZone.equals("A")) {
             drive.grabGoal();
-
+            sleep(500);
             drive.followTrajectory(lineToA);
-
             drive.releaseGoal();
             sleep(1000);
             drive.deployArm();
@@ -285,8 +286,11 @@ TRAJECTORIES
             drive.releaseGoal();
             sleep(1000);
             drive.followTrajectory(aLine);
+            drive.followTrajectory(aLine2);
+            drive.retractArm();
 
-            }
+
+        }
         }
 
 
