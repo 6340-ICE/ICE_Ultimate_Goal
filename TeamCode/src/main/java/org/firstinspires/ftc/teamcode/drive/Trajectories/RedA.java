@@ -58,6 +58,7 @@ public class RedA extends LinearOpMode {
            sleep(1000);
            drive.followTrajectory(aLine);
            drive.followTrajectory(aLine2);
+           drive.retractArm();
 
 
            //Shoot preloaded rings
