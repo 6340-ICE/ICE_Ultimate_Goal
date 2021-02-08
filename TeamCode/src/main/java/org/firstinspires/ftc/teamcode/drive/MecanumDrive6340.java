@@ -195,7 +195,6 @@ public class MecanumDrive6340 extends MecanumDrive {
         // reverse any motors using DcMotor.setDirection()
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
-        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //define and initialize all installed servos
         leftServo = hardwareMap.get(Servo.class, "leftServo");
@@ -446,7 +445,7 @@ public class MecanumDrive6340 extends MecanumDrive {
 
     //Shooter
     public void shootRings (){
-        shooter.setVelocity(1350);
+        shooter.setVelocity(1425);
     }
 
     //Arm
