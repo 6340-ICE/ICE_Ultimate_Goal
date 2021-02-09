@@ -27,6 +27,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -65,6 +66,8 @@ public class MecanumDrive6340 extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
    public static PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(30, 0, 2, 15);
+    public double currentVoltage;
+
 
     public static double LATERAL_MULTIPLIER = 1;
 
@@ -107,7 +110,8 @@ public class MecanumDrive6340 extends MecanumDrive {
     /*
     Instantiate servos
      */
-    protected Servo leftServo, rightServo, armServo;
+    public Servo leftServo, rightServo, armServo;
+    public AnalogInput armPOT;
 
 
     protected VoltageSensor batteryVoltageSensor;
@@ -200,7 +204,8 @@ public class MecanumDrive6340 extends MecanumDrive {
         leftServo = hardwareMap.get(Servo.class, "leftServo");
         rightServo = hardwareMap.get(Servo.class, "rightServo");
         armServo = hardwareMap.get(Servo.class, "armServo");
-
+        armPOT = hardwareMap.get(AnalogInput.class, "armPOT");
+        double currentVoltage = armPOT.getVoltage();
 
         // if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
@@ -449,15 +454,23 @@ public class MecanumDrive6340 extends MecanumDrive {
     }
 
     //Arm
-    public void deployArm(){arm.setPower(.5);
+    public void deployArm() {
+
+          arm.setPower(0.3);
+                }
+
+    public void retractArm(){
+        arm.setPower(-0.4);
+    }
+
+    public void deliverGoal(){
+        if (armPOT.getVoltage() > 1.60) {
+            arm.setPower(-0.4);
+               } else  if (armPOT.getVoltage() > 2.0) {
+            arm.setPower(0);
+        }else arm.setPower(-0.2);
         }
 
-    public void retractArm() {
-        arm.setPower(-0.5);
-    }
-        public void Arm (double power){
-        arm.setPower(power);
-    }
     //Grab goal
     public void grabGoal (){
         leftServo.setPosition(0.9);

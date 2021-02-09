@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
 
 /**
@@ -14,6 +15,8 @@ import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
  * exercise is to ascertain whether the localizer has been configured properly (note: the pure
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
+
+
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "drive")
 public class TeleOp extends LinearOpMode {
     @Override
@@ -33,29 +36,54 @@ public class TeleOp extends LinearOpMode {
                             -gamepad1.right_stick_x
                     )
             );
-                                    //TODO create button map
+            //TODO create button map
 
-                                            drive.update();
+            drive.update();
+
             if (gamepad2.x) // X is intake system
                 drive.intakeRings();
 
             if (gamepad2.b) // B is stopping intake
                 drive.intake.setPower(0);
 
-            if (gamepad2.right_trigger>0.5) // Right trigger starts shooter, releasing trigger stops it
-            drive.shootRings();
-            else if (gamepad2.right_trigger<0.5)
-            drive.shooter.setVelocity (0);
+            if (gamepad2.right_trigger > 0.5) // Right trigger starts shooter, releasing trigger stops it
+                drive.shootRings();
+            else if (gamepad2.right_trigger < 0.5)
+                drive.shooter.setVelocity(0);
 
-            drive.Arm(gamepad2.right_stick_y/2); // Right stick down pulls arm up, and vice versa
+            //drive.Arm(gamepad2.right_stick_y/2); // Right stick down pulls arm up, and vice versa
 
             if (gamepad2.right_bumper) //Right bumper grabs with arm servo
                 drive.grabGoal();
             if (gamepad2.left_bumper) // Left bumper releases arm servo
                 drive.releaseGoal();
-            telemetry.addData("targetVelocity",drive.shooter.getVelocity());
 
+            /*
+            Arm Controller
+             */
+            drive.arm.setPower(-gamepad2.left_stick_y*.4);
+
+            if (gamepad2.dpad_up) {
+                drive.grabGoal();
+                drive.deliverGoal();
+            }
+            if (gamepad2.dpad_down) {
+                drive.arm.setPower(-.02);
+                sleep(500);
+                drive.releaseGoal();
+
+            }
+
+
+
+            telemetry.addData("targetVelocity", drive.shooter.getVelocity());
+// Show the potentiometer’s voltage in telemetry
+            telemetry.addData("Potentiometer voltage", drive.armPOT.getVoltage());
             telemetry.update();
+            telemetry.update();
+
         }
     }
 }
+
+
