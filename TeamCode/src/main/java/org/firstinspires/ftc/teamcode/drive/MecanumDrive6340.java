@@ -201,7 +201,8 @@ public class MecanumDrive6340 extends MecanumDrive {
         leftRear.setDirection(DcMotor.Direction.REVERSE);
 
         //define and initialize all installed servos
-        leftServo = hardwareMap.get(Servo.class, "leftServo");
+        rightServo = hardwareMap.get(Servo.class, "rightServo");
+        //leftServo = hardwareMap.get(Servo.class, "leftServo");
         shooterServo = hardwareMap.get(Servo.class, "shooterServo");
         armServo = hardwareMap.get(Servo.class, "armServo");
         armPOT = hardwareMap.get(AnalogInput.class, "armPOT");
@@ -450,8 +451,14 @@ public class MecanumDrive6340 extends MecanumDrive {
 
     //Shooter
     public void shootRings (){
-        shooter.setVelocity(1425);
-    }
+        shooter.setVelocity(1475);
+        if (shooter.getVelocity()> 1450) {
+            shooterServo.setPosition(0);//FIRE
+            shooterServo.setPosition(1);//LOAD
+        }
+        //else shooterServo.setPosition(1);
+        }
+
 
     //Arm
     public void deployArm() {
@@ -473,15 +480,15 @@ public class MecanumDrive6340 extends MecanumDrive {
 
     //Grab goal
     public void grabGoal (){
-        leftServo.setPosition(0.9);
-        //rightServo.setPosition(0);
+       // leftServo.setPosition(0.9);
+        rightServo.setPosition(0);
         armServo.setPosition(0);
 
     }
     //Release goal
     public void releaseGoal () {
-        leftServo.setPosition(0);
-        //rightServo.setPosition(1);
+        //leftServo.setPosition(0);
+        rightServo.setPosition(1);
         armServo.setPosition(1);
     }
 

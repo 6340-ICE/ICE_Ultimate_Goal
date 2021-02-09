@@ -57,7 +57,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "Concept: Red Auto", group = "Autonomous")
+@Autonomous(name = "Red Auto", group = "Autonomous")
 //@Disabled
 public class RedAuto extends LinearOpMode {
 
@@ -139,10 +139,10 @@ TRAJECTORIES
         Trajectory aLine = drive.trajectoryBuilder(goalToA.end())
                 .splineTo(new Vector2d(8, -6), Math.toRadians(90))
                 .build();
-        Trajectory aLine2 = drive.trajectoryBuilder(aLine.end())
+        /*Trajectory aLine2 = drive.trajectoryBuilder(aLine.end())
                 .splineTo(new Vector2d( 8, -6 ), Math.toRadians(0))
                 .build();
-
+*/
 
         //B STUFFF
         Trajectory startToB = drive.trajectoryBuilder(new Pose2d(-62, -55))
@@ -286,7 +286,7 @@ TRAJECTORIES
             drive.releaseGoal();
             sleep(1000);
             drive.followTrajectory(aLine);
-            drive.followTrajectory(aLine2);
+            //drive.followTrajectory(aLine2);
             drive.retractArm();
 
 

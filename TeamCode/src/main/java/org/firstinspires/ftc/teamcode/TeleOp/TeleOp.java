@@ -46,10 +46,23 @@ public class TeleOp extends LinearOpMode {
             if (gamepad2.b) // B is stopping intake
                 drive.intake.setPower(0);
 
-            if (gamepad2.right_trigger > 0.5) // Right trigger starts shooter, releasing trigger stops it
-                drive.shootRings();
+            /*
+            shooterServo positions
+            1 = LOAD
+            0 = FIRE
+             */
+            if (gamepad2.right_trigger > 0.5) {// Right trigger starts shooter, releasing trigger stops it
+                drive.shooter.setVelocity(1475);
+            if (drive.shooter.getVelocity()>1450) {
+                drive.shooterServo.setPosition(0);
+                sleep(500);
+                drive.shooterServo.setPosition(1);
+                sleep(500);
+
+            }}
             else if (gamepad2.right_trigger < 0.5)
                 drive.shooter.setVelocity(0);
+            drive.shooterServo.setPosition(1);
 
             //drive.Arm(gamepad2.right_stick_y/2); // Right stick down pulls arm up, and vice versa
 
