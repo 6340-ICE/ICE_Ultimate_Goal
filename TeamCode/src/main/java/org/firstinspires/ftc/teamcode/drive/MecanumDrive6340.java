@@ -110,7 +110,7 @@ public class MecanumDrive6340 extends MecanumDrive {
     /*
     Instantiate servos
      */
-    public Servo leftServo, rightServo, armServo;
+    public Servo leftServo, rightServo, armServo, shooterServo;
     public AnalogInput armPOT;
 
 
@@ -202,7 +202,7 @@ public class MecanumDrive6340 extends MecanumDrive {
 
         //define and initialize all installed servos
         leftServo = hardwareMap.get(Servo.class, "leftServo");
-        rightServo = hardwareMap.get(Servo.class, "rightServo");
+        shooterServo = hardwareMap.get(Servo.class, "shooterServo");
         armServo = hardwareMap.get(Servo.class, "armServo");
         armPOT = hardwareMap.get(AnalogInput.class, "armPOT");
         double currentVoltage = armPOT.getVoltage();
@@ -474,14 +474,14 @@ public class MecanumDrive6340 extends MecanumDrive {
     //Grab goal
     public void grabGoal (){
         leftServo.setPosition(0.9);
-        rightServo.setPosition(0);
+        //rightServo.setPosition(0);
         armServo.setPosition(0);
 
     }
     //Release goal
     public void releaseGoal () {
         leftServo.setPosition(0);
-        rightServo.setPosition(1);
+        //rightServo.setPosition(1);
         armServo.setPosition(1);
     }
 
