@@ -65,7 +65,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 public class MecanumDrive6340 extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
-   public static PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(30, 0, 2, 15);
+   public static PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(30, 0, 0, 13);
     public double currentVoltage;
 
 

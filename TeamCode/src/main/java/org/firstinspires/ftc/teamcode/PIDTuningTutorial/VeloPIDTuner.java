@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
-@Disabled
+//@Disabled
 
 @Config
 @TeleOp
@@ -26,7 +26,7 @@ public class VeloPIDTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Change my id
-        DcMotorEx myMotor = hardwareMap.get(DcMotorEx.class, "flywheelMotor1");
+        DcMotorEx shooter = hardwareMap.get(DcMotorEx.class, "shooter");
 
         // Reverse as appropriate
         // myMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -35,14 +35,14 @@ public class VeloPIDTuner extends LinearOpMode {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        MotorConfigurationType motorConfigurationType = myMotor.getMotorType().clone();
+        MotorConfigurationType motorConfigurationType = shooter.getMotorType().clone();
         motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-        myMotor.setMotorType(motorConfigurationType);
+        shooter.setMotorType(motorConfigurationType);
 
-        myMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
-        setPIDFCoefficients(myMotor, MOTOR_VELO_PID);
+        setPIDFCoefficients(shooter, MOTOR_VELO_PID);
 
         TuningController tuningController = new TuningController();
 
@@ -65,11 +65,11 @@ public class VeloPIDTuner extends LinearOpMode {
 
         while (!isStopRequested() && opModeIsActive()) {
             double targetVelo = tuningController.update();
-            myMotor.setVelocity(targetVelo);
+            shooter.setVelocity(targetVelo);
 
             telemetry.addData("targetVelocity", targetVelo);
 
-            double motorVelo = myMotor.getVelocity();
+            double motorVelo = shooter.getVelocity();
             telemetry.addData("velocity", motorVelo);
             telemetry.addData("error", targetVelo - motorVelo);
 
@@ -77,7 +77,7 @@ public class VeloPIDTuner extends LinearOpMode {
             telemetry.addData("lowerBound", 0);
 
             if (lastKp != MOTOR_VELO_PID.p || lastKi != MOTOR_VELO_PID.i || lastKd != MOTOR_VELO_PID.d || lastKf != MOTOR_VELO_PID.f) {
-                setPIDFCoefficients(myMotor, MOTOR_VELO_PID);
+                setPIDFCoefficients(shooter, MOTOR_VELO_PID);
 
                 lastKp = MOTOR_VELO_PID.p;
                 lastKi = MOTOR_VELO_PID.i;
