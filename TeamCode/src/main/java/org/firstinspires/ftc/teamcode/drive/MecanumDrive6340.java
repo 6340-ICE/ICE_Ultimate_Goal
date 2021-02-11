@@ -472,10 +472,10 @@ public class MecanumDrive6340 extends MecanumDrive {
 
     public void deliverGoal(){
         if (armPOT.getVoltage() > 1.60) {
-            arm.setPower(-0.4);
+            arm.setPower(-0.5);
                } else  if (armPOT.getVoltage() > 2.0) {
-            arm.setPower(0);
-        }else arm.setPower(-0.2);
+            arm.setPower(-0.3);
+        }else arm.setPower(-0.3);
         }
 
     //Grab goal

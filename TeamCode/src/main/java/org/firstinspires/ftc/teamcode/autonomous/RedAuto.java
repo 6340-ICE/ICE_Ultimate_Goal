@@ -105,10 +105,13 @@ TRAJECTORIES
 
         drive.setPoseEstimate(startPose);
 
-        Trajectory targetZoneC = drive.trajectoryBuilder(startPose)
+        Trajectory shooterLine = drive.trajectoryBuilder(startPose)
+                .splineTo(new Vector2d( -5,-50), Math.toRadians(0))
+                .build();
+    //C STUFF
+        Trajectory targetZoneC = drive.trajectoryBuilder(shooterLine.end())
                 .splineTo(new Vector2d(55, -51), Math.toRadians(0))
                 .build();
-
 
         Trajectory cToGoal = drive.trajectoryBuilder(targetZoneC.end(),true)
                 .splineTo(new Vector2d(-33,-22), Math.toRadians(180))
@@ -127,8 +130,9 @@ TRAJECTORIES
                 .build();
 
 
-        Trajectory lineToA = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d( 8,-55), Math.toRadians(0))
+//A STUFF
+        Trajectory lineToA = drive.trajectoryBuilder(shooterLine.end())
+                .splineTo(new Vector2d( 8,-50), Math.toRadians(0))
                 .build();
         Trajectory aToGoal = drive.trajectoryBuilder(lineToA.end(), true )
                 .splineTo(new Vector2d(-33, -22), Math.toRadians(180))
@@ -139,13 +143,11 @@ TRAJECTORIES
         Trajectory aLine = drive.trajectoryBuilder(goalToA.end())
                 .splineTo(new Vector2d(8, -6), Math.toRadians(90))
                 .build();
-        /*Trajectory aLine2 = drive.trajectoryBuilder(aLine.end())
-                .splineTo(new Vector2d( 8, -6 ), Math.toRadians(0))
-                .build();
-*/
+
+
 
         //B STUFFF
-        Trajectory startToB = drive.trajectoryBuilder(new Pose2d(-62, -55))
+        Trajectory startToB = drive.trajectoryBuilder(shooterLine.end())
                 .forward(90)
                 .build();
         Trajectory left = drive.trajectoryBuilder(startToB.end())
@@ -240,9 +242,28 @@ TRAJECTORIES
         }
 
         //AUTONOMOUS STUFF RIGHT HERE
-
+        telemetry.addData("targetVelocity", drive.shooter.getVelocity());
+        telemetry.update();
         if (targetZone.equals("C")) {
             drive.grabGoal();//grab goal,
+            sleep(500);
+            drive.shooter.setVelocity(1500);
+            drive.followTrajectory(shooterLine);
+            sleep(5000);
+            drive.followTrajectory(lineToA);
+            drive.releaseGoal();// release goal,
+            drive.shooterServo.setPosition(0);
+            sleep(1000);
+            drive.shooterServo.setPosition(1);
+            sleep(1000);
+            drive.shooterServo.setPosition(0);
+            sleep(1000);
+            drive.shooterServo.setPosition(1);
+            sleep(1000);
+            drive.shooterServo.setPosition(0);
+            sleep(1000);
+            drive.shooterServo.setPosition(1);
+            sleep(1000);
             drive.followTrajectory(targetZoneC); //Drive to target zone C
             drive.releaseGoal();// release goal,
             sleep(1000);// wait 1 sec,
@@ -259,6 +280,23 @@ TRAJECTORIES
 
             drive.grabGoal();
             sleep(500);
+            drive.shooter.setVelocity(1500);
+            drive.followTrajectory(shooterLine);
+            sleep(5000);
+            drive.followTrajectory(lineToA);
+            drive.releaseGoal();// release goal,
+            drive.shooterServo.setPosition(0);
+            sleep(1000);
+            drive.shooterServo.setPosition(1);
+            sleep(1000);
+            drive.shooterServo.setPosition(0);
+            sleep(1000);
+            drive.shooterServo.setPosition(1);
+            sleep(1000);
+            drive.shooterServo.setPosition(0);
+            sleep(1000);
+            drive.shooterServo.setPosition(1);
+            sleep(1000);
             drive.followTrajectory(startToB);
             drive.followTrajectory(left);
             drive.releaseGoal();
@@ -273,21 +311,39 @@ TRAJECTORIES
             drive.retractArm();
             sleep(1000);
 
+
         }else if (targetZone.equals("A")) {
+
             drive.grabGoal();
             sleep(500);
+            drive.shooter.setVelocity(1500);
+            drive.followTrajectory(shooterLine);
+            sleep(5000);
             drive.followTrajectory(lineToA);
-            drive.releaseGoal();
+            drive.releaseGoal();// release goal,
+            drive.shooterServo.setPosition(0);
+            sleep(1000);
+            drive.shooterServo.setPosition(1);
+            sleep(1000);
+            drive.shooterServo.setPosition(0);
+            sleep(1000);
+            drive.shooterServo.setPosition(1);
+            sleep(1000);
+            drive.shooterServo.setPosition(0);
+            sleep(1000);
+            drive.shooterServo.setPosition(1);
             sleep(1000);
             drive.deployArm();
-            drive.followTrajectory(aToGoal);           //Go back for second wobble goal
-            drive.grabGoal(); //grab wobble goal
-            drive.followTrajectory(goalToA);
-            drive.releaseGoal();
-            sleep(1000);
-            drive.followTrajectory(aLine);
-            //drive.followTrajectory(aLine2);
-            drive.retractArm();
+                drive.shooter.setPower(0);
+                drive.followTrajectory(aToGoal);           //Go back for second wobble goal
+                drive.grabGoal(); //grab wobble goal
+                drive.followTrajectory(goalToA);
+                drive.releaseGoal();
+                sleep(1000);
+                drive.followTrajectory(aLine);
+                //drive.followTrajectory(aLine2);
+                drive.retractArm();
+
 
 
         }

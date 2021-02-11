@@ -31,8 +31,8 @@ public class TeleOp extends LinearOpMode {
         while (!isStopRequested()) {
             drive.setWeightedDrivePower(
                     new Pose2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x,
+                            -gamepad1.left_stick_y*.7,
+                            -gamepad1.left_stick_x*.7,
                             -gamepad1.right_stick_x
                     )
             );
@@ -52,12 +52,12 @@ public class TeleOp extends LinearOpMode {
             0 = FIRE
              */
             if (gamepad2.right_trigger > 0.5) {// Right trigger starts shooter, releasing trigger stops it
-                drive.shooter.setVelocity(1475);
-            if (drive.shooter.getVelocity()>1450) {
+                drive.shooter.setVelocity(1500);
+            if (drive.shooter.getVelocity()>1475) {
                 drive.shooterServo.setPosition(0);
-                sleep(500);
+                sleep(1000);
                 drive.shooterServo.setPosition(1);
-                sleep(500);
+                sleep(1000);
 
             }}
             else if (gamepad2.right_trigger < 0.5)
