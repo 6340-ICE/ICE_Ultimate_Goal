@@ -454,6 +454,7 @@ public class MecanumDrive6340 extends MecanumDrive {
         shooter.setVelocity(1475);
         if (shooter.getVelocity()> 1450) {
             shooterServo.setPosition(0);//FIRE
+
             shooterServo.setPosition(1);//LOAD
         }
         //else shooterServo.setPosition(1);
