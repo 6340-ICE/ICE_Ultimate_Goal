@@ -450,15 +450,14 @@ public class MecanumDrive6340 extends MecanumDrive {
     }
 
     //Shooter
-    public void shootRings (){
+    public void shootRings () {
         shooter.setVelocity(1475);
-        if (shooter.getVelocity()> 1450) {
-            shooterServo.setPosition(0);//FIRE
+        if (shooter.getVelocity() > 1450) {
+            shooterServo.setPosition(0);//LOAD
 
-            shooterServo.setPosition(1);//LOAD
+            shooterServo.setPosition(1);//FIRE
         }
-        //else shooterServo.setPosition(1);
-        }
+    }
 
 
     //Arm
@@ -492,6 +491,7 @@ public class MecanumDrive6340 extends MecanumDrive {
         rightServo.setPosition(1);
         armServo.setPosition(1);
     }
+
 
 
 
