@@ -106,7 +106,7 @@ TRAJECTORIES
         drive.setPoseEstimate(startPose);
 
         Trajectory shooterLine = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d( -5,-55), Math.toRadians(0))
+                .splineTo(new Vector2d( -5,-50), Math.toRadians(0))
                 .build();
 
 
@@ -156,14 +156,12 @@ TRAJECTORIES
                 .build();
 
         Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end(), true)
-                .splineTo(new Vector2d(48,-40), Math.toRadians(270))
+                .splineTo(new Vector2d(48,-45), Math.toRadians(270))
                 .build();
         Trajectory cToLine = drive.trajectoryBuilder(goalToC.end())
                 .splineTo(new Vector2d(0,12), Math.toRadians(180))
                 .addTemporalMarker(0.5,()-> {
-                    drive.retractArm();
-                    sleep(1000);
-                    drive.arm.setPower(0);
+
                 })
                 .build();
 
