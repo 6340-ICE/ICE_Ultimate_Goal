@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive6340;
@@ -22,7 +23,7 @@ public class TeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumDrive6340 drive = new MecanumDrive6340(hardwareMap);
-
+        PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(30, 0, 0, 13);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         drive.shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -43,26 +44,27 @@ public class TeleOp extends LinearOpMode {
             if (gamepad2.x) // X is intake system
                 drive.intakeRings();
 
-            if (gamepad2.b) // B is stopping intake
+            if (gamepad2.b) {// B is stopping intake
                 drive.intake.setPower(0);
-
+                drive.indexer.setPower(0);
+            }
             /*
             shooterServo positions
-            1 = LOAD
-            0 = FIRE
+            0 = LOAD
+            1 = FIRE
              */
             if (gamepad2.right_trigger > 0.5) {// Right trigger starts shooter, releasing trigger stops it
                 drive.shooter.setVelocity(1500);
             if (drive.shooter.getVelocity()>1475) {
-                drive.shooterServo.setPosition(0);
-                sleep(1000);
                 drive.shooterServo.setPosition(1);
+                sleep(1000);
+                drive.shooterServo.setPosition(0);
                 sleep(1000);
 
             }}
             else if (gamepad2.right_trigger < 0.5)
                 drive.shooter.setVelocity(0);
-            drive.shooterServo.setPosition(1);
+            drive.shooterServo.setPosition(0);
 
             //drive.Arm(gamepad2.right_stick_y/2); // Right stick down pulls arm up, and vice versa
 

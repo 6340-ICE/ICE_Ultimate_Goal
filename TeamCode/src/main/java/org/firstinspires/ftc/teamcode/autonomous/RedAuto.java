@@ -139,7 +139,7 @@ TRAJECTORIES
                 .build();
 
         Trajectory goalToB = drive.trajectoryBuilder(bToGoal.end(),true)
-                .splineTo(new Vector2d(29, -17), Math.toRadians(270))
+                .splineTo(new Vector2d(25 , -17), Math.toRadians(270))
                 .build();
 
         Trajectory bLine2 = drive.trajectoryBuilder(goalToB.end())

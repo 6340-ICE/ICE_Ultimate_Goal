@@ -103,6 +103,7 @@ public class MecanumDrive6340 extends MecanumDrive {
     public DcMotorEx intake;
     public DcMotorEx shooter;
     public DcMotorEx arm;
+    public DcMotorEx indexer;
 
 
     protected BNO055IMU imu;
@@ -166,6 +167,7 @@ public class MecanumDrive6340 extends MecanumDrive {
         arm = hardwareMap.get(DcMotorEx.class, "frontEncoder");
         shooter = hardwareMap.get(DcMotorEx.class, "shooter");
         intake = hardwareMap.get(DcMotorEx.class, "rightEncoder");
+        indexer = hardwareMap.get(DcMotorEx.class, "leftEncoder");
 
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
@@ -445,7 +447,8 @@ public class MecanumDrive6340 extends MecanumDrive {
          */
 
     public void intakeRings (){
-        intake.setPower (-1);
+        intake.setPower (1);
+        indexer.setPower (1);
 
     }
 
