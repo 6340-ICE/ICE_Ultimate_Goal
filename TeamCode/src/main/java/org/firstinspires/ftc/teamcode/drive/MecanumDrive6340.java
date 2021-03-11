@@ -65,7 +65,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 public class MecanumDrive6340 extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
-   public static PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(30, 0, 0, 13);
+   public static PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(35, 0, 7, 13.5);
     public double currentVoltage;
 
 
@@ -447,8 +447,8 @@ public class MecanumDrive6340 extends MecanumDrive {
          */
 
     public void intakeRings (){
-        intake.setPower (-1);
-        indexer.setPower (1);
+        intake.setPower (1);
+        indexer.setPower (-1);
 
     }
 

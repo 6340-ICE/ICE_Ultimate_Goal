@@ -238,10 +238,11 @@ drive.shooterServo.setPosition(0); //Hold
         if (tfod != null) {
             tfod.shutdown();
         }
-        telemetry.addData("targetVelocity", drive.shooter.getVelocity());
+
         //AUTONOMOUS STUFF RIGHT HERE
 
         if (targetZone.equals("C")) {
+
             drive.grabGoal();//grab goal,
             sleep(500);
             drive.shooter.setVelocity(1500);
@@ -310,7 +311,7 @@ drive.shooterServo.setPosition(0); //Hold
 
             drive.grabGoal();
             sleep(500);
-            drive.shooter.setVelocity(1500);
+            drive.shooter.setVelocity(1550);
             drive.followTrajectory(shooterLine);
             drive.shooterServo.setPosition(1);
             sleep(1000);
@@ -342,6 +343,7 @@ drive.shooterServo.setPosition(0); //Hold
 
 
         }
+
         }
 
 
