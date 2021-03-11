@@ -447,7 +447,7 @@ public class MecanumDrive6340 extends MecanumDrive {
          */
 
     public void intakeRings (){
-        intake.setPower (1);
+        intake.setPower (-1);
         indexer.setPower (1);
 
     }
